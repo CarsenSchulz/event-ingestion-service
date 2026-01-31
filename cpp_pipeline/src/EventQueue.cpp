@@ -3,8 +3,7 @@
 
 bool EventQueue::enqueue(Event&& event) //single producer / single consumer only
 {
-    if (queue.size() >= capacity)
-        return false;
+    if (queue.size() >= capacity) return false;
     
     else {
         queue.push(std::move(event));
@@ -14,8 +13,7 @@ bool EventQueue::enqueue(Event&& event) //single producer / single consumer only
 
 std::optional<Event> EventQueue::dequeue()
 {
-    if (queue.empty())
-        return std::nullopt;
+    if (queue.empty()) return std::nullopt;
 
     else {
         Event event = std::move(queue.front());
