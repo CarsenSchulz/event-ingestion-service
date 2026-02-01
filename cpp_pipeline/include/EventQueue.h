@@ -13,6 +13,8 @@ public:
     void pop();                // Remove last dequeued Event
     void shutdown();           // Stop consumer (not strictly needed here, but safe)
 
+    size_t size();
+
 private:
     std::queue<Event> queue;   // Own Events by value
     size_t capacity;

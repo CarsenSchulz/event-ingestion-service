@@ -8,6 +8,8 @@ void Processor::run(int duration_seconds)
     auto start = std::chrono::steady_clock::now();
     auto end = start + std::chrono::seconds(duration_seconds);
 
+    int processed_since_last_log = 0;
+
     while (std::chrono::steady_clock::now() < end) {
         const Event* e = queue.dequeue();
         if (e) 
@@ -15,14 +17,21 @@ void Processor::run(int duration_seconds)
             total_events++;
             per_instrument[e->instrument_id].update(e->price);
             queue.pop();
+            processed_since_last_log++;
+
+            // Print queue size every 1000 events
+            if (processed_since_last_log >= 1000) {
+                std::cout << "[Processor] Queue size: " << queue.size() << "\n";
+                processed_since_last_log = 0;
+            }
         } 
         else 
         {
-            // queue empty: brief yield to avoid burning CPU
             std::this_thread::yield();
         }
     }
 }
+
 
 void Processor::report() const {
     std::cout << "Total events processed: " << total_events << "\n";

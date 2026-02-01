@@ -28,3 +28,8 @@ void EventQueue::shutdown() {
     stopped = true;
     cv.notify_all();
 }
+
+size_t EventQueue::size() {
+    std::lock_guard<std::mutex> lock(mtx);
+    return queue.size();
+}
