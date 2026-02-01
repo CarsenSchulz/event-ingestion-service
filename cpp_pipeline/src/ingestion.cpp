@@ -42,7 +42,7 @@ bool Ingestion::ingest(int64_t instrument_id, double price, int64_t timestamp)
     return result; // copy into queue, drops event if queue full
 }
 
-void Ingestion::report() const {
-    std::cout << "# Validation Fails: " << validation_fails << "\n";
-    std::cout << "# Dropped Events: " << dropped_events << "\n";
+void Ingestion::report(std::ostream& os) const {
+    os << "# Validation Fails: " << validation_fails << "\n";
+    os << "# Dropped Events: " << dropped_events << "\n";
 }

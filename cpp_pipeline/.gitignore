@@ -1,2 +1,5 @@
 #build folder
 builds/
+
+#benchmarks folder
+benchmarks/

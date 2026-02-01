@@ -40,5 +40,5 @@ public:
     explicit Processor(EventQueue& q) : queue(q) {}
 
     void run(int duration_seconds); // Main processing loop
-    void report() const;           // Print metrics
+    void report(std::ostream& os) const;           // Print metrics
 };

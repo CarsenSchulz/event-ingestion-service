@@ -1,10 +1,13 @@
 #include "EventQueue.h"
 #include "processor.h"
 #include "ingestion.h"
+#include "benchmarks.h"
+
 #include <thread>
 #include <chrono>
 #include <random>
-#include <iostream>
+
+#include <sstream>
 
 int main() {
     constexpr int QUEUE_CAPACITY = 500000;
@@ -57,8 +60,19 @@ int main() {
 
     processor_thread.join();
 
-    ingestion.report();
-    processor.report();
+    // Ensure benchmarks folder exists
+    Benchmarks::ensureFolder();
+
+    // Collect metrics from ingestion and processor into a string stream
+    std::ostringstream metrics;
+    ingestion.report(metrics);   // must accept std::ostream& now
+    processor.report(metrics);   // must accept std::ostream& now
+
+    // Generate timestamped filename
+    std::string filename = Benchmarks::makeTimestampedFilename();
+
+    // Write metrics to file and echo to console
+    Benchmarks::writeMetricsWithConsole(filename, metrics);
 
     return 0;
 }

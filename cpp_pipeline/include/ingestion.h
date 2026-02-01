@@ -22,5 +22,5 @@ public:
     explicit Ingestion(EventQueue& q); // Constructor
     
     bool ingest(int64_t instrument_id, double price, int64_t timestamp); // Returns true if event was successfully ingested, false if queue full
-    void report() const;           // Print metrics
+    void report(std::ostream& os) const;           // Print metrics
 };
