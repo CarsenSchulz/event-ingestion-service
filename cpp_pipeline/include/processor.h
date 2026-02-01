@@ -4,12 +4,12 @@
 #include <cstdint>
 
 struct InstrumentStats {
-    int64_t count = 0;
-    double min_price = 0;
-    double max_price = 0;
-    double total_price = 0;
+    int64_t count = 0; // Number of events processed
+    double min_price = 0; // Minimum price of instrument
+    double max_price = 0;  // Maximum price of instrument
+    double total_price = 0; //Total price to compute average
 
-    void update(double price) {
+    void update(double price) { // Updates stats
         if (count == 0) 
         {
             min_price = max_price = price;
@@ -23,7 +23,7 @@ struct InstrumentStats {
         count++;
     }
 
-    double avg_price() const 
+    double avg_price() const // Computes average on demand
     {
         return count > 0 ? total_price / count : 0.0;
     }
@@ -31,13 +31,13 @@ struct InstrumentStats {
 
 class Processor 
 {
-    EventQueue& queue;
-    int64_t total_events = 0;
-    std::unordered_map<int64_t, InstrumentStats> per_instrument;
+    EventQueue& queue; // Reference to queue
+    int64_t total_events = 0; // Num events processed
+    std::unordered_map<int64_t, InstrumentStats> per_instrument; // Map for per-instrument stats
 
 public:
     explicit Processor(EventQueue& q) : queue(q) {}
 
-    void run(int duration_seconds); // main processing loop
-    void report() const;           // print metrics
+    void run(int duration_seconds); // Main processing loop
+    void report() const;           // Print metrics
 };

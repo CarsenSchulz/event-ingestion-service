@@ -31,7 +31,7 @@ public:
     bool enqueue(const Event& event);
     
     // Dequeue an Event
-    // Moves event into reference param and returns true if available
-    // Returns false if the queue is empty
+    // Returns Event pointer if event is available from queue
+    // Returns nullptr if the queue is empty
     const Event* dequeue();
 };
