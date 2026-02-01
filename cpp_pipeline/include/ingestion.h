@@ -11,6 +11,8 @@ class Ingestion {
 
     std::array<int64_t, ID_MAX> lastTimestamps{}; // Tracks latest timestamp of specific ID, based on index
     std::array<bool, ID_MAX> seen{};  // Tracks if instrument_id has been seen, needed so first entry passes validation
+    int validation_fails = 0;
+    int dropped_events = 0;
 
     bool validateInstrument(int64_t instrument_id) const; // Checks if instrument_id is valid
     bool validatePrice(double price) const; // Checks if price is valid
@@ -20,4 +22,5 @@ public:
     explicit Ingestion(EventQueue& q); // Constructor
     
     bool ingest(int64_t instrument_id, double price, int64_t timestamp); // Returns true if event was successfully ingested, false if queue full
+    void report() const;           // Print metrics
 };

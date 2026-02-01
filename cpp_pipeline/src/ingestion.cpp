@@ -1,6 +1,7 @@
 #include "ingestion.h"
 #include <cmath>
 #include <utility>
+#include <iostream>
 
 Ingestion::Ingestion(EventQueue& q)
     : queue(q) {}
@@ -27,6 +28,7 @@ bool Ingestion::ingest(int64_t instrument_id, double price, int64_t timestamp)
         !validatePrice(price) ||
         !validateTimestamp(instrument_id, timestamp))
     {
+        validation_fails++;
         return false; // failed validation
     }
 
@@ -35,5 +37,12 @@ bool Ingestion::ingest(int64_t instrument_id, double price, int64_t timestamp)
     seen[idx] = true;
 
     Event event(instrument_id, price, timestamp);
-    return queue.enqueue(std::move(event)); // copy into queue, drops event if queue full
+    bool result = queue.enqueue(std::move(event));
+    if (!result) dropped_events++;
+    return result; // copy into queue, drops event if queue full
+}
+
+void Ingestion::report() const {
+    std::cout << "# Validation Fails: " << validation_fails << "\n";
+    std::cout << "# Dropped Events: " << dropped_events << "\n";
 }

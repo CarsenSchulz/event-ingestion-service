@@ -10,7 +10,7 @@ int main() {
     constexpr int QUEUE_CAPACITY = 1000000;
     constexpr int NUM_INSTRUMENTS = 100;  // number of synthetic instruments
     constexpr int ID_MAX = NUM_INSTRUMENTS; // max valid instrument ID
-    constexpr int DURATION_SECONDS = 10;
+    constexpr int DURATION_SECONDS = 5;
 
     EventQueue queue(QUEUE_CAPACITY);
     Processor processor(queue);
@@ -31,21 +31,20 @@ int main() {
     auto end = start + std::chrono::seconds(DURATION_SECONDS);
 
     int64_t timestamp = 0;
-    int dropped_events = 0;
     while (std::chrono::steady_clock::now() < end) {
         int64_t instrument_id = instrument_dist(rng);
         double price = price_dist(rng);
         timestamp++;
 
         if (!ingestion.ingest(instrument_id, price, timestamp)) {
-            dropped_events++;
+
         }
     }
     queue.shutdown();
 
     processor_thread.join();
 
-    std::cout << "Dropped events (queue full/validation failure): " << dropped_events << "\n";
+    ingestion.report();
     processor.report();
 
     return 0;
