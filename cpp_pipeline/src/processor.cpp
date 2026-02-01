@@ -32,7 +32,6 @@ void Processor::run(int duration_seconds)
     }
 }
 
-
 void Processor::report() const {
     std::cout << "Total events processed: " << total_events << "\n";
     std::cout << "Per-instrument stats:\n";
