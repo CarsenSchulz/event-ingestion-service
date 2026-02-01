@@ -16,7 +16,7 @@ int main() {
     double MIN_PRICE = 0.0;  
     double MAX_PRICE = 200.0;
 
-    constexpr bool FAULT_INJECTION = true;
+    constexpr bool FAULT_INJECTION = false;
 
     // Variables for generator only — not constants, can change
     int gen_max_id = NUM_INSTRUMENTS;
